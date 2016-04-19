@@ -3,12 +3,14 @@ package com.changlg.cn.newknowledge.gson.util;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Gson工具类封装
@@ -30,7 +32,7 @@ public class GsonUtil {
     }
 
     /**
-     * 将对象转换成json格式
+     * 将对象转换成json格式字符串
      * @param obj 指定对象
      * @return json格式字符串
      */
@@ -42,6 +44,13 @@ public class GsonUtil {
         return jsonStr;
     }
 
+    /**
+     * 将json格式字符串转换成List集合
+     * @param jsonString json格式字符串
+     * @param clazz 集合元素泛型
+     * @param <T> 集合对象
+     * @return List集合
+     */
     public static <T extends Object> T jsonToList(String jsonString, Class<?> clazz){
         List<Object> list = new ArrayList<>();
         JSONArray jsonArray;
@@ -58,6 +67,13 @@ public class GsonUtil {
         return (T) list;
     }
 
+    /**
+     * 将json格式字符串转换成对象
+     * @param jsonString json格式字符串
+     * @param clazz 对象类型
+     * @param <T> 对象
+     * @return 指定对象
+     */
     public static  <T extends Object> T jsonToObj(String jsonString, Class<?> clazz){
         Object obj = null;
         if (gson != null) {
@@ -66,6 +82,36 @@ public class GsonUtil {
             }
         }
         return (T) obj;
+    }
+
+    /**
+     *  根据 给的 jsonStr 自动的生成对象或者数组.判断依据是开始字符为“[”，要求是规范的json
+     * @param jsonString json格式字符串
+     * @param clazz 对象类型
+     * @param <T> 对象
+     * @return 指定对象
+     */
+    public static <T extends Object> T josnToBean(String jsonString, Class<?> clazz){
+
+        if (jsonString.startsWith("[")){
+            return jsonToList(jsonString,clazz);
+        }else {
+            return jsonToObj(jsonString,clazz);
+        }
+
+    }
+
+    /**
+     * 将json格式转换成map对象
+     * @param jsonString json格式字符串
+     * @return map对象
+     */
+    public static Map<?,?> jsonToMap(String jsonString){
+        Map<?,?> objMap = null;
+        if (gson != null) {
+            objMap =  gson.fromJson(jsonString,new TypeToken<Map<?,?>>(){}.getType());
+        }
+        return objMap;
     }
 
 }
