@@ -1,8 +1,9 @@
-package com.changlg.cn.newknowledge.gson.util;
+package com.changlg.cn.tapechat.gson;
 
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
@@ -23,7 +24,7 @@ public class GsonUtil {
 
     static {
         if (gson == null) {
-            gson = new Gson();
+            gson = new GsonBuilder().setPrettyPrinting().create();
         }
     }
 
@@ -82,23 +83,6 @@ public class GsonUtil {
             }
         }
         return (T) obj;
-    }
-
-    /**
-     *  根据 给的 jsonStr 自动的生成对象或者数组.判断依据是开始字符为“[”，要求是规范的json
-     * @param jsonString json格式字符串
-     * @param clazz 对象类型
-     * @param <T> 对象
-     * @return 指定对象
-     */
-    public static <T extends Object> T josnToBean(String jsonString, Class<?> clazz){
-
-        if (jsonString.startsWith("[")){
-            return jsonToList(jsonString,clazz);
-        }else {
-            return jsonToObj(jsonString,clazz);
-        }
-
     }
 
     /**

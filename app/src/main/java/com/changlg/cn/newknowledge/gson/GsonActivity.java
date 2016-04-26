@@ -7,9 +7,11 @@ import android.widget.TextView;
 
 import com.changlg.cn.newknowledge.R;
 import com.changlg.cn.newknowledge.gson.entity.Father;
+import com.changlg.cn.newknowledge.gson.entity.FormData;
 import com.changlg.cn.newknowledge.gson.entity.Person;
 import com.changlg.cn.newknowledge.gson.entity.Point;
 import com.changlg.cn.newknowledge.gson.entity.Son;
+import com.changlg.cn.tapechat.gson.GsonUtil;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -35,7 +37,7 @@ public class GsonActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gson);
         ButterKnife.inject(this);
 
-        Gson  gson = new GsonBuilder()
+        Gson gson = new GsonBuilder()
                 .excludeFieldsWithoutExposeAnnotation()//不导出实体中没有用@Expose注解的属性
                 .setDateFormat("yyyy-MM-dd HH:mm:ss:SSS")//Date类型时间转化为特定格式
                 .setPrettyPrinting()//格式化Json
@@ -44,16 +46,19 @@ public class GsonActivity extends AppCompatActivity {
                 .create();
         String name = null;
         Person person = new Person(1, name, 26, new Date());
-        String personJson = gson.toJson(person, Person.class);
-        Person personTran = gson.fromJson(personJson, Person.class);
-        ShowText.setText(personJson + "\n" + personTran.toString());
 
-        showMap();
-        jsonMapWithValueList();
+        String personJson = GsonUtil.objToJson(person);
+        Person personTran =  GsonUtil.jsonToObj(personJson, Person.class);
+        ShowText.setText("GsonUtil:"+personJson + "\n" + personTran.toString());
+
+        setUpListData();
+//        showMap();
+//        jsonMapWithValueList();
+        specialJson();
     }
 
 
-    private void showMap(){
+    private void showMap() {
         Gson gson = new GsonBuilder().enableComplexMapKeySerialization()
                 .setPrettyPrinting()//格式化Json
                 .serializeNulls()// 序列化null字段，如："name":null，默认null字段是不转换的
@@ -63,6 +68,7 @@ public class GsonActivity extends AppCompatActivity {
         map1.put(new Point(5, 6), "a");
         map1.put(new Point(8, 8), "b");
         String s = gson.toJson(map1);
+//        String s = GsonUtil.objToJson(map1);
         Log.d("chang", s);
 
         Map<Point, String> retMap = gson.fromJson(s,
@@ -73,23 +79,63 @@ public class GsonActivity extends AppCompatActivity {
         }
 
         // key为String的map
-        Map<String ,Point> StringkvMap = new LinkedHashMap<>();
-        StringkvMap.put("name",new Point(1, 2));
+        Map<String, Point> StringkvMap = new LinkedHashMap<>();
+        StringkvMap.put("name", new Point(1, 2));
         StringkvMap.put("age", new Point(4, 3));
-        String mapJson = gson.toJson(StringkvMap);
-        Log.d("chang", mapJson);
 
-        Map<String, Point> resultMap = gson.fromJson(mapJson,
-                new TypeToken<Map<String, Point>>() {
-                }.getType());
+//        String mapJson = gson.toJson(StringkvMap);
+        String mapJson = GsonUtil.objToJson(StringkvMap);
+
+        Log.d("GsonUtil", mapJson);
+
+//        Map<String, Point> resultMap = gson.fromJson(mapJson,
+//                new TypeToken<Map<String, Point>>() {
+//                }.getType());
+        Map<String, Point> resultMap = (Map<String, Point>) GsonUtil.jsonToMap(mapJson);
         for (String item : resultMap.keySet()) {
-            Log.d("chang", "key:" + item + " values:" + resultMap.get(item));
+            Log.d("GsonUtil", "key:" + item + " values:" + resultMap.get(item));
         }
 
     }
 
-    private void jsonMapWithValueList(){
 
+    List<Father> fatherList;
+    List<Son> sonList;
+
+    private void jsonMapWithValueList() {
+
+
+
+        Map<String, Object> map = new LinkedHashMap<>();
+        map.put("fathers", fatherList);
+        map.put("sons", sonList);
+
+        Gson gson = new GsonBuilder().enableComplexMapKeySerialization()
+                .setPrettyPrinting()//格式化Json
+                .serializeNulls()// 序列化null字段，如："name":null，默认null字段是不转换的
+                .create();
+        String str = gson.toJson(map);
+        Log.d("chang", str);
+
+        Map<String, Object> retMap = gson.fromJson(str,
+                new TypeToken<Map<String, List<Object>>>() {
+                }.getType());
+
+        for (String key : retMap.keySet()) {
+            Log.d("chang", "key:" + key + " values:" + retMap.get(key));
+            if (key.equals("fathers")) {
+                List<Father> stuList = (List<Father>) retMap.get(key);
+                System.out.println(stuList);
+                Log.d("chang", str);
+            } else if (key.equals("sons")) {
+                List<Son> tchrList = (List<Son>) retMap.get(key);
+                System.out.println(tchrList);
+
+            }
+        }
+    }
+
+    private void setUpListData() {
         Father father1 = new Father();
         father1.setId(1);
         father1.setName("Tom");
@@ -105,7 +151,7 @@ public class GsonActivity extends AppCompatActivity {
         father3.setName("Barry");
         father3.setBirthDay(new Date());
 
-        List<Father> fatherList = new ArrayList<>();
+        fatherList = new ArrayList<>();
         fatherList.add(father1);
         fatherList.add(father2);
         fatherList.add(father3);
@@ -125,35 +171,64 @@ public class GsonActivity extends AppCompatActivity {
         son3.setName("小李");
         son3.setTitle("小队长");
 
-        List<Son> sonList = new ArrayList<>();
+        sonList = new ArrayList<>();
         sonList.add(son1);
         sonList.add(son2);
         sonList.add(son3);
+    }
 
-        Map<String,Object> map = new LinkedHashMap<>();
-        map.put("fathers",fatherList);
-        map.put("sons",sonList);
 
-        Gson gson = new Gson();
-        String str = gson.toJson(map);
-        Log.d("chang",str);
+    private void specialJson() {
 
-        Map<String, Object> retMap = gson.fromJson(str,
-                new TypeToken<Map<String, List<Object>>>() {
-                }.getType());
+        FormData formData1 = new FormData();
+        formData1.setFormName("fathers");
+        formData1.setFormData(fatherList);
 
-        for (String key : retMap.keySet()) {
-            Log.d("chang","key:" + key + " values:" + retMap.get(key));
-            if (key.equals("fathers")) {
-                List<Father> stuList = (List<Father>) retMap.get(key);
-                System.out.println(stuList);
-                Log.d("chang", str);
-            } else if (key.equals("sons")) {
-                List<Son> tchrList = (List<Son>) retMap.get(key);
-                System.out.println(tchrList);
+        FormData formData2 = new FormData();
+        formData2.setFormName("sons");
+        formData2.setFormData(sonList);
 
+        List<FormData> list = new ArrayList<>();
+        list.add(formData1);
+        list.add(formData2);
+
+        Gson gson = new GsonBuilder().enableComplexMapKeySerialization()
+                .setPrettyPrinting()//格式化Json
+                .serializeNulls()// 序列化null字段，如："name":null，默认null字段是不转换的
+                .create();
+        String listJosn =  gson.toJson(list);
+
+        Log.d("chang", listJosn);
+        List<FormData> tableDatas2 = GsonUtil.jsonToList(listJosn, FormData.class);
+        // 将json转为数据-->start
+//        List<FormData> tableDatas2 = gson.fromJson(listJosn,
+//                new TypeToken<List<FormData>>() {
+//                }.getType());
+        for (int i = 0; i < tableDatas2.size(); i++) {
+            FormData entityData = tableDatas2.get(i);
+            String tableName = entityData.getFormName();
+            List tableData = entityData.getFormData();
+            String s2 = gson.toJson(tableData);
+            if (tableName.equals("sons")) {
+                System.out.println("sons");
+                List<Son> retStuList = gson.fromJson(s2,
+                        new TypeToken<List<Son>>() {
+                        }.getType());
+                for (int j = 0; j < retStuList.size(); j++) {
+                    System.out.println("GsonUtil.jsonToList:"+retStuList.get(j));
+                }
+
+            } else if (tableName.equals("fathers")) {
+                System.out.println("fathers");
+                List<Father> retTchrList = gson.fromJson(s2,
+                        new TypeToken<List<Father>>() {
+                        }.getType());
+                for (int j = 0; j < retTchrList.size(); j++) {
+                    System.out.println("GsonUtil.jsonToList:"+retTchrList.get(j));
+                }
             }
         }
+
     }
 
 }
