@@ -15,30 +15,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 两端对齐的text view，可以设置最后一行靠左，靠右，居中对齐
- *
- * @author YD
+ * Justifyfull text view, you can set the last line on the left, right, center
  */
 public class AlignTextView extends TextView {
-    private float textHeight; // 单行文字高度
-    private float textLineSpaceExtra = 0; // 额外的行间距
-    private int width; // textView宽度
-    private List<String> lines = new ArrayList<String>(); // 分割后的行
-    private List<Integer> tailLines = new ArrayList<Integer>(); // 尾行
-    private Align align = Align.ALIGN_LEFT; // 默认最后一行左对齐
-    private boolean firstCalc = true;  // 初始化计算
+    private float textHeight;
+    private float textLineSpaceExtra = 0; // Line spacing
+    private int width; // textView width
+    private List<String> lines = new ArrayList<String>(); // Split lines
+    private List<Integer> tailLines = new ArrayList<Integer>(); // tailLines
+    private Align align = Align.ALIGN_LEFT; // default tail line align left
+    private boolean firstCalc = true;  // The first calculation of the logo, to prevent repeated calls, repeated calculation
 
     private float lineSpacingMultiplier = 1.0f;
     private float lineSpacingAdd = 0.0f;
 
-    private int originalHeight = 0; //原始高度
-    private int originalLineCount = 0; //原始行数
-    private int originalPaddingBottom = 0; //原始paddingBottom
+    private int originalHeight = 0;
+    private int originalLineCount = 0;
+    private int originalPaddingBottom = 0;
     private boolean setPaddingFromMe = false;
 
-    // 尾行对齐方式
+    //  tail line align mode
     public enum Align {
-        ALIGN_LEFT, ALIGN_CENTER, ALIGN_RIGHT  // 居中，居左，居右,针对段落最后一行
+        ALIGN_LEFT, ALIGN_CENTER, ALIGN_RIGHT
     }
 
     public AlignTextView(Context context) {
@@ -84,7 +82,7 @@ public class AlignTextView extends TextView {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
 
-        //首先进行高度调整
+        //First of all, a high degree of adjustment
         if (firstCalc) {
             width = getMeasuredWidth();
             String text = getText().toString();
@@ -92,27 +90,27 @@ public class AlignTextView extends TextView {
             lines.clear();
             tailLines.clear();
 
-            // 文本含有换行符时，分割单独处理
+            //The text contains a newline, handle the split alone.
             String[] items = text.split("\\n");
             for (String item : items) {
                 calc(paint, item);
             }
 
-            //使用替代textview计算原始高度与行数
+            //Calculate the original height and number of rows by using alternative textview
             measureTextViewHeight(text, paint.getTextSize(), getMeasuredWidth() -
                     getPaddingLeft() - getPaddingRight());
 
-            //获取行高
+            //get line height
             textHeight = 1.0f * originalHeight / originalLineCount;
 
             textLineSpaceExtra = textHeight * (lineSpacingMultiplier - 1) + lineSpacingAdd;
 
-            //计算实际高度,加上多出的行的高度(一般是减少)
+            //Calculate the actual height, plus the number of rows of the height (generally reduced)
             int heightGap = (int) ((textLineSpaceExtra + textHeight) * (lines.size() -
                     originalLineCount));
 
             setPaddingFromMe = true;
-            //调整textview的paddingBottom来缩小底部空白
+            //Adjust paddingBottom of textview to reduce the bottom blank
             setPadding(getPaddingLeft(), getPaddingTop(), getPaddingRight(),
                     originalPaddingBottom + heightGap);
 
@@ -132,7 +130,7 @@ public class AlignTextView extends TextView {
         float firstHeight = getTextSize() - (fm.bottom - fm.descent + fm.ascent - fm.top);
 
         int gravity = getGravity();
-        if ((gravity & 0x1000) == 0) { // 是否垂直居中
+        if ((gravity & 0x1000) == 0) { // Whether the vertical center
             firstHeight = firstHeight + (textHeight - firstHeight) / 2;
         }
 
@@ -144,12 +142,12 @@ public class AlignTextView extends TextView {
         for (int i = 0; i < lines.size(); i++) {
             float drawY = i * textHeight + firstHeight;
             String line = lines.get(i);
-            // 绘画起始x坐标
+            //Draw the start x coordinates
             float drawSpacingX = paddingLeft;
             float gap = (width - paint.measureText(line));
             float interval = gap / (line.length() - 1);
 
-            // 绘制最后一行
+            // Draw The last line
             if (tailLines.contains(i)) {
                 interval = 0;
                 if (align == Align.ALIGN_CENTER) {
@@ -168,9 +166,9 @@ public class AlignTextView extends TextView {
     }
 
     /**
-     * 设置尾行对齐方式
+     * setup align mode of the last line
      *
-     * @param align 对齐方式
+     * @param align align mode
      */
     public void setAlign(Align align) {
         this.align = align;
@@ -178,30 +176,30 @@ public class AlignTextView extends TextView {
     }
 
     /**
-     * 计算每行应显示的文本数
+     * Calculate the number of text to be displayed per line
      *
-     * @param text 要计算的文本
+     * @param text text
      */
     private void calc(Paint paint, String text) {
         if (text.length() == 0) {
             lines.add("\n");
             return;
         }
-        int startPosition = 0; // 起始位置
-        float oneChineseWidth = paint.measureText("中");
-        int ignoreCalcLength = (int) (width / oneChineseWidth); // 忽略计算的长度
+        int startPosition = 0;
+        float oneChineseWidth = paint.measureText("AS");
+        int ignoreCalcLength = (int) (width / oneChineseWidth); // ignore calculation Length
         StringBuilder sb = new StringBuilder(text.substring(0, Math.min(ignoreCalcLength + 1,
                 text.length())));
 
         for (int i = ignoreCalcLength + 1; i < text.length(); i++) {
             if (paint.measureText(text.substring(startPosition, i + 1)) > width) {
                 startPosition = i;
-                //将之前的字符串加入列表中
+                //Add a string to the list
                 lines.add(sb.toString());
 
                 sb = new StringBuilder();
 
-                //添加开始忽略的字符串，长度不足的话直接结束,否则继续
+                //Add start to ignore the string, the length of the problem directly to the end, otherwise continue
                 if ((text.length() - startPosition) > ignoreCalcLength) {
                     sb.append(text.substring(startPosition, startPosition + ignoreCalcLength));
                 } else {
@@ -239,11 +237,11 @@ public class AlignTextView extends TextView {
 
 
     /**
-     * 获取文本实际所占高度，辅助用于计算行高,行数
+     * Get the actual height of the text, auxiliary for the calculation of the line, the number of rows
      *
-     * @param text        文本
-     * @param textSize    字体大小
-     * @param deviceWidth 屏幕宽度
+     * @param text        text
+     * @param textSize    text size
+     * @param deviceWidth device width
      */
     private void measureTextViewHeight(String text, float textSize, int deviceWidth) {
         TextView textView = new TextView(getContext());

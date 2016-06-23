@@ -3,7 +3,7 @@ package com.changlg.cn.tapechat.log;
 import android.util.Log;
 
 /**
- * 基本log
+ * base log
  * Created by chang on 2016/4/11.
  */
 public class BaseLog {
@@ -23,7 +23,10 @@ public class BaseLog {
             printSub(type, tag, msg);
             return;
         }
-        // 字数过大的log一次输出不完，就以CHUNK_SIZE分组，多次log输出
+        /*
+        Log is too large a number of times the output is not
+        finished, the CHUNK_SIZE group, multiple log output
+         */
         for (int i = 0; i < length; i += CHUNK_SIZE) {
             int count = Math.min(length - i, CHUNK_SIZE);
             //create a new String with system's default charset (which is UTF-8 for Android)

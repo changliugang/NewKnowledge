@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'//添加
 
 android {
     compileSdkVersion 23
@@ -18,10 +19,25 @@ android {
     }
 }
 
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile 'com.google.code.gson:gson:2.2.4'
-    compile 'com.android.support:recyclerview-v7:24.0.0-alpha2'
+    compile 'com.android.support:recyclerview-v7:23.2.1'
 }
+
+//添加
+publish {
+    userOrg = 'androidchang'//bintray.com用户名
+    groupId = 'com.chang'//jcenter上的路径
+    artifactId = 'tapechat'//项目名称
+    publishVersion = '1.0.0'//版本号
+    desc = 'Oh , this is a nice description'//描述，不重要
+    website = 'https://github.com/changliugang/tapechat'//网站，不重要；尽量模拟github上的地址，例如我这样的；当然你有地址最好了
+}
+

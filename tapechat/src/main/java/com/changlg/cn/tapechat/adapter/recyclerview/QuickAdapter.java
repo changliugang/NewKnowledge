@@ -5,7 +5,7 @@ import android.content.Context;
 import java.util.List;
 
 /**
- * 通用的RecyclerView适配器
+ * universal RecyclerView adapter
  * Created by chang on 2016/2/29.
  */
 public abstract class QuickAdapter<T> extends BaseQuickAdapter<T,BaseAdapterHelper>{

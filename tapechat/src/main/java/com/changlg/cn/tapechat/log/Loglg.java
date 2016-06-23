@@ -5,33 +5,33 @@ import android.text.TextUtils;
 import java.io.File;
 
 /**
- * 多功能Log
+ * core Log
  * Created by chang on 2016/4/7.
  */
 public class Loglg {
 
     public static final String DEFAULT_MESSAGE = "execute";
-    // 系统行分隔符（windows下“\n”，UNIX下“/n”）
+    // system line separator(windows  "\n",UNIX  "/n")
     public static final String LINE_SEPARATOR = System.getProperty("line.separator");
-    public static final String NULL_TIPS = "Log with null object";// 空提示
+    public static final String NULL_TIPS = "Log with null object";// null hint
     public static final String PARAM = "Param";
     public static final String NULL = "null";
-    public static final String TAG_DEFAULT = "Loglg";// 默认Tag
+    public static final String TAG_DEFAULT = "Loglg";// default Tag
 
-    public static final int JSON_INDENT = 4;// Json格式缩进
+    public static final int JSON_INDENT = 4;// Json format indent
 
     // log level
-    public static final int V = 0x1;// Verbose 详细信息
-    public static final int D = 0x2;// Debug 调试
-    public static final int I = 0x3;// Info  通告
-    public static final int W = 0x4;// Warn  警告
-    public static final int E = 0x5;// Error 错误
-    public static final int A = 0x6;// Assert 断言信息（新东西，开发和调试时候用的，一般会用在关键语句判断上，一旦断言不通过，会警告或退出）
+    public static final int V = 0x1;// Verbose
+    public static final int D = 0x2;// Debug
+    public static final int I = 0x3;// Info
+    public static final int W = 0x4;// Warn
+    public static final int E = 0x5;// Error
+    public static final int A = 0x6;// Assert
     public static final int JSON = 0x7;
     public static final int XML = 0x8;
 
     private static boolean IS_SHOW_LOG = true;
-    private static final int STACK_TRACE_INDEX = 5;// 堆栈跟踪指数
+    private static final int STACK_TRACE_INDEX = 5;
 
     public static void init(boolean isShowLog) {
         IS_SHOW_LOG = isShowLog;
@@ -184,11 +184,11 @@ public class Loglg {
     }
 
     /**
-     * 封装log内容
+     * package log content
      *
-     * @param tagString log标签
-     * @param objects   log内容
-     * @return 包含log完整内容的字符串数组
+     * @param tagString log tag
+     * @param objects   log content
+     * @return String array containing log full content
      */
     private static String[] wrapContent(String tagString, Object... objects) {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
@@ -199,25 +199,25 @@ public class Loglg {
         if (lineNumber < 0)
             lineNumber = 0;
         String methodName = stackTraceElement.getMethodName();
-        // 将函数名首字母大写，并将其后内容拼接为完整函数名
+        // Capitalize the first letter of the function name and the subsequent content to be a full function name.
         String methodNameNovel = methodName.substring(0, 1).toUpperCase() + methodName.substring(1);
-        // tag没有指定的话就给个函数名作为tag
+        // Tag does not specify a function name as tag
         String tag = tagString == null ? methodName : tagString;
         if (TextUtils.isEmpty(tag))
             tag = TAG_DEFAULT;
 
         String msg = objects == null ? NULL_TIPS : getObjectsString(objects);
-        // 在窗口可点击跳转到指定代码行，是“（）”起了作用
+        //In the window can be clicked to jump to the specified code line, is "()" played a role
         String headString = "[(" + className + ":" + lineNumber + ")#" + methodNameNovel + "]";
 
         return new String[]{tag, msg, headString};
     }
 
     /**
-     * 获取log内容字符串
+     * get log content String
      *
-     * @param objects log内容对象组
-     * @return log内容字符串
+     * @param objects log content object array
+     * @return log content String
      */
     private static String getObjectsString(Object... objects) {
         if (objects.length > 1) {

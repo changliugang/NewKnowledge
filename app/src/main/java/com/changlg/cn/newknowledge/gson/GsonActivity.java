@@ -16,7 +16,6 @@ import com.changlg.cn.newknowledge.gson.entity.Son;
 import com.changlg.cn.newknowledge.toolbar.BaseToolbarActivity;
 import com.changlg.cn.tapechat.gson.GsonUtil;
 import com.changlg.cn.tapechat.log.Loglg;
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -43,13 +42,13 @@ public class GsonActivity extends BaseToolbarActivity {
         setContentView(R.layout.activity_gson);
         ButterKnife.inject(this);
         // GsonBuilder的常用配置
-        Gson gson = new GsonBuilder()
-                .excludeFieldsWithoutExposeAnnotation()//不导出实体中没有用@Expose注解的属性
-                .setDateFormat("yyyy-MM-dd HH:mm:ss:SSS")//Date类型时间转化为特定格式
-                .setPrettyPrinting()//格式化Json
-                .serializeNulls()// 序列化null字段，如："name":null，默认null字段是不转换的
-                .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)//会把字段首字母大写,注:对于实体上使用了@SerializedName注解的不会生效.
-                .create();
+//        Gson gson = new GsonBuilder()
+//                .excludeFieldsWithoutExposeAnnotation()//不导出实体中没有用@Expose注解的属性
+//                .setDateFormat("yyyy-MM-dd HH:mm:ss:SSS")//Date类型时间转化为特定格式
+//                .setPrettyPrinting()//格式化Json
+//                .serializeNulls()// 序列化null字段，如："name":null，默认null字段是不转换的
+//                .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)//会把字段首字母大写,注:对于实体上使用了@SerializedName注解的不会生效.
+//                .create();
 
         // 实体转Json
         String personJson = GsonUtil.objToJson(TestBean.gsonBean());

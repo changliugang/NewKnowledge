@@ -10,7 +10,7 @@ import java.io.OutputStreamWriter;
 import java.util.Random;
 
 /**
- * 文件log
+ * file log
  * Created by JustChang on 2016/4/10.
  */
 public class FileLog {

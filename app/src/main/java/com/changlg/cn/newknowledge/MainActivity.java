@@ -1,6 +1,5 @@
 package com.changlg.cn.newknowledge;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,13 +8,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.changlg.cn.newknowledge.crashloghandler.CrashHandler;
-import com.changlg.cn.newknowledge.gson.GsonActivity;
 import com.changlg.cn.newknowledge.toolbar.BaseToolbarActivity;
 import com.changlg.cn.tapechat.adapter.recyclerview.BaseAdapterHelper;
 import com.changlg.cn.tapechat.adapter.recyclerview.QuickAdapter;
 import com.changlg.cn.tapechat.adapter.recyclerview.divider.HorizontalDividerItemDecoration;
-import com.changlg.cn.tapechat.adapter.recyclerview.listener.OnRecyclerItemClickListener;
-import com.changlg.cn.tapechat.adapter.recyclerview.listener.OnRecyclerItemLongClickListener;
 
 import java.util.Arrays;
 import java.util.List;
@@ -57,22 +53,20 @@ public class MainActivity extends BaseToolbarActivity {
             @Override
             protected void convert(BaseAdapterHelper helper, String item) {
                 helper.setText(R.id.demo_item_name,item);
+                helper.getTextView(R.id.demo_item_name).setClickable(true);
+                helper.setOnClickListener(R.id.demo_item_name, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(MainActivity.this, "demo_item_name", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         };
+
+
+
         mainList.setAdapter(adapter);
-        mainList.addOnItemTouchListener(new OnRecyclerItemClickListener(mainList) {
-            @Override
-            public void onItemClick(RecyclerView parent, View child, int position) {
-                startActivity(new Intent(MainActivity.this, GsonActivity.class));
-//                Toast.makeText(MainActivity.this, "点击了第" + position + "项", Toast.LENGTH_SHORT).show();
-            }
-        });
-        mainList.addOnItemTouchListener(new OnRecyclerItemLongClickListener(mainList) {
-            @Override
-            public void onItemLongClick(RecyclerView parent, View child, int position) {
-                Toast.makeText(MainActivity.this, "长按了第" + position + "项", Toast.LENGTH_SHORT).show();
-            }
-        });
+
     }
 
 }

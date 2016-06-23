@@ -3,6 +3,19 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/tapechat/src/main/java/com/changlg/cn/tapechat/adapter/BaseQuickAdapter.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/tapechat/src/main/java/com/changlg/cn/tapechat/adapter/QuickAdapter.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/tapechat/src/main/java/com/changlg/cn/tapechat/adapter/recyclerview/BaseAdapterHelper.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tapechat/src/main/java/com/changlg/cn/tapechat/adapter/recyclerview/BaseQuickAdapter.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tapechat/src/main/java/com/changlg/cn/tapechat/adapter/recyclerview/MultiItemTypeSupport.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tapechat/src/main/java/com/changlg/cn/tapechat/adapter/recyclerview/QuickAdapter.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tapechat/src/main/java/com/changlg/cn/tapechat/adapter/recyclerview/listener/OnRecyclerItemClickListener.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tapechat/src/main/java/com/changlg/cn/tapechat/adapter/recyclerview/listener/OnRecyclerItemLongClickListener.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tapechat/src/main/java/com/changlg/cn/tapechat/gson/GsonUtil.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tapechat/src/main/java/com/changlg/cn/tapechat/log/BaseLog.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tapechat/src/main/java/com/changlg/cn/tapechat/log/FileLog.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tapechat/src/main/java/com/changlg/cn/tapechat/log/JsonLog.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tapechat/src/main/java/com/changlg/cn/tapechat/log/Loglg.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tapechat/src/main/java/com/changlg/cn/tapechat/log/Util.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tapechat/src/main/java/com/changlg/cn/tapechat/toolbar/ToolBarHelper.java" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

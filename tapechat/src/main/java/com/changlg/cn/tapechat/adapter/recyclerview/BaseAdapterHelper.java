@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 
 /**
- * 适配器帮助类基类
+ * BaseAdapterHelper
  * Created by chang on 2016/2/26.
  */
 public class BaseAdapterHelper extends RecyclerView.ViewHolder {
@@ -33,9 +33,9 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
     }
 
     /**
-     * 取得View
+     * retrieveView
      *
-     * @param viewId the View 唯一标识
+     * @param viewId the View id
      * @param <T>    the View
      * @return the View
      */
@@ -49,9 +49,9 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
     }
 
     /**
-     * 可以使用这个函数来自定义获取View的操作
+     * retrieveView package function , defined yourself
      *
-     * @param viewId the View 唯一标识
+     * @param viewId the View id
      * @param <T>    the View
      * @return the View
      */
@@ -60,10 +60,10 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
     }
 
     /**
-     * 给View设置背景色
+     * View setup BackgroundColor
      *
-     * @param viewId the View 唯一标识
-     * @param color  颜色值
+     * @param viewId the View id
+     * @param color  color
      * @return BaseAdapterHelper
      */
     public BaseAdapterHelper setBackgroundColor(int viewId, int color) {
@@ -73,10 +73,10 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
     }
 
     /**
-     * 给View设置背景图片
+     * View setup Background Resource
      *
-     * @param viewId the View 唯一标识
-     * @param resId  图片资源唯一标识
+     * @param viewId the View id
+     * @param resId  image resource id
      * @return BaseAdapterHelper
      */
     public BaseAdapterHelper setBackgroundRes(int viewId, int resId) {
@@ -86,10 +86,10 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
     }
 
     /**
-     * 给TextView设置文字
+     * TextView setup Text
      *
-     * @param viewId TextView 唯一标识
-     * @param text   文字
+     * @param viewId TextView id
+     * @param text   Text
      * @return BaseAdapterHelper
      */
     public BaseAdapterHelper setText(int viewId, String text) {
@@ -99,10 +99,10 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
     }
 
     /**
-     * 给TextView设置文字颜色
+     * TextView setup Text color
      *
-     * @param viewId the View 唯一标识
-     * @param color  颜色值(数值)
+     * @param viewId the View id
+     * @param color color value
      * @return BaseAdapterHelper
      */
     public BaseAdapterHelper setTextColor(int viewId, int color) {
@@ -113,10 +113,10 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
 
 
     /**
-     * 给TextView设置文字颜色
+     * TextView setup Text color
      *
-     * @param viewId TextView唯一标识
-     * @param color  颜色值(color资源Id)
+     * @param viewId TextViewid
+     * @param color   color Resource Id
      * @return BaseAdapterHelper
      */
     public BaseAdapterHelper setTextColorRes(int viewId, int color) {
@@ -127,10 +127,10 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
 
 
     /**
-     * 给ImageView设置图片
+     * ImageView setup image Resource
      *
-     * @param viewId ImageView 唯一标识
-     * @param resId  图片资源唯一标识
+     * @param viewId ImageView id
+     * @param resId  image Resource id
      * @return BaseAdapterHelper
      */
     public BaseAdapterHelper setImageResource(int viewId, int resId) {
@@ -140,9 +140,9 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
     }
 
     /**
-     * 给ImageView设置图片
+     * ImageView setup Drawable
      *
-     * @param viewId   ImageView 唯一标识
+     * @param viewId   ImageView id
      * @param drawable Drawable
      * @return BaseAdapterHelper
      */
@@ -153,9 +153,9 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
     }
 
     /**
-     * 给ImageView设置图片
+     * ImageView setup Bitmap
      *
-     * @param viewId ImageView 唯一标识
+     * @param viewId ImageView id
      * @param bitmap Bitmap
      * @return BaseAdapterHelper
      */
@@ -165,24 +165,11 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
         return this;
     }
 
-//    /**
-//     * 加载网络图片
-//     * @param context 上下文
-//     * @param viewId ImageView 唯一标识
-//     * @param imgUrl 图片网络地址
-//     * @return BaseAdapterHelper
-//     */
-//    public BaseAdapterHelper setImageWithUrl(Context context, int viewId,String imgUrl){
-//        ImageView imageView = retrieveView(viewId);
-//        Picasso.with(context).load(imgUrl).into(imageView);
-//        return this;
-//    }
-
     /**
-     * 设置透明度
+     * setup alpha
      *
-     * @param viewId the View 唯一标识
-     * @param value  透明度 0-1
+     * @param viewId the View id
+     * @param value  alpha 0-1
      * @return BaseAdapterHelper
      */
     public BaseAdapterHelper setAlpha(int viewId, float value) {
@@ -198,10 +185,10 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
     }
 
     /**
-     * 设置显示与否
+     * setup Visible
      *
-     * @param viewId  the View 唯一标识
-     * @param visible 是否显示 true VISIBLE , false GONE
+     * @param viewId  the View id
+     * @param visible  true VISIBLE , false GONE
      * @return BaseAdapterHelper
      */
     public BaseAdapterHelper setVisible(int viewId, boolean visible) {
@@ -210,12 +197,10 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
         return this;
     }
 
-    // TODO 可以在这里用SpannableString添加一个文字超链接的函数
-
     /**
-     * 设置文字超链接，电话，邮件等
+     * setup Text link
      *
-     * @param viewId TextView 唯一标识
+     * @param viewId TextView id
      * @return BaseAdapterHelper
      */
     public BaseAdapterHelper linkify(int viewId) {
@@ -225,10 +210,10 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
     }
 
     /**
-     * 设置字体
+     * setup typeface
      *
-     * @param viewId   TextView 唯一标识
-     * @param typeface 字体
+     * @param viewId   TextView id
+     * @param typeface typeface
      * @return BaseAdapterHelper
      */
     public BaseAdapterHelper setTypeface(int viewId, Typeface typeface) {
@@ -239,10 +224,10 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
     }
 
     /**
-     * 设置多个多个TextView字体相同字体
+     * setup all TextView with same typeface
      *
-     * @param typeface 字体
-     * @param viewIds  多个TextView 唯一标识
+     * @param typeface typeface
+     * @param viewIds all TextView id
      * @return BaseAdapterHelper
      */
     public BaseAdapterHelper setTypeface(Typeface typeface, int... viewIds) {
@@ -254,10 +239,10 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
 
 
     /**
-     * 设置ProgressBar的进度值
+     * setup ProgressBar progress value
      *
-     * @param viewId   ProgressBar唯一标识
-     * @param progress 进度值
+     * @param viewId   ProgressBarid
+     * @param progress progress value
      * @return BaseAdapterHelper
      */
     public BaseAdapterHelper setProgress(int viewId, int progress) {
@@ -267,11 +252,11 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
     }
 
     /**
-     * 设置ProgressBar的进度值
+     * setup ProgressBar progress value
      *
-     * @param viewId   ProgressBar唯一标识
-     * @param progress 进度值
-     * @param max      最大值
+     * @param viewId   ProgressBarid
+     * @param progress progress value
+     * @param max      max value
      * @return BaseAdapterHelper
      */
     public BaseAdapterHelper setProgress(int viewId, int progress, int max) {
@@ -282,10 +267,10 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
     }
 
     /**
-     * 设置点击事件
+     * setup click listener
      *
-     * @param viewId   the View 唯一标识
-     * @param listener 点击监听
+     * @param viewId   the View id
+     * @param listener click listener
      * @return BaseAdapterHelper
      */
     public BaseAdapterHelper setOnClickListener(int viewId, View.OnClickListener listener) {
@@ -295,10 +280,10 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
     }
 
     /**
-     * 设置长按事件
+     * setup long click listener
      *
-     * @param viewId   the View 唯一标识
-     * @param listener 长按监听
+     * @param viewId   the View id
+     * @param listener  long click listener
      * @return BaseAdapterHelper
      */
     public BaseAdapterHelper setOnLongClickListener(int viewId, View.OnLongClickListener listener) {
@@ -308,9 +293,9 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
     }
 
     /**
-     * 设置tag
+     * setup tag
      *
-     * @param viewId the View 唯一标识
+     * @param viewId the View id
      * @param obj    tag
      * @return BaseAdapterHelper
      */
@@ -321,9 +306,9 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
     }
 
     /**
-     * 设置check状态
-     * @param viewId the View 唯一标识
-     * @param checkable check状态
+     * setup check state
+     * @param viewId the View id
+     * @param checkable check state
      * @return BaseAdapterHelper
      */
     public BaseAdapterHelper setChecked(int viewId,boolean checkable){
@@ -333,9 +318,9 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
     }
 
     /**
-     * 设置适配器
-     * @param viewId the View 唯一标识
-     * @param adapter 适配器
+     * setup adapter
+     * @param viewId the View id
+     * @param adapter adapter
      * @return BaseAdapterHelper
      */
     public BaseAdapterHelper setAdapter(int viewId, Adapter adapter){
@@ -345,7 +330,7 @@ public class BaseAdapterHelper extends RecyclerView.ViewHolder {
     }
 
     /**
-     * 获取ConvertView
+     * get ConvertView
      *
      * @return ConvertView
      */

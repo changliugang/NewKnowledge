@@ -4,7 +4,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 /**
- * 工具类，判断空，打印上下边框
+ * utils for Null character，Print top or bottom Borders
  * Created by chang on 2016/4/11.
  */
 public class Util {

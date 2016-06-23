@@ -1,7 +1,7 @@
 package com.changlg.cn.tapechat.adapter.recyclerview;
 
 /**
- * 多类型item支持接口
+ * Multi-Type item Support interface
  * Created by chang on 2016/2/29.
  */
 public interface MultiItemTypeSupport<T> {

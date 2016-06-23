@@ -11,25 +11,42 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * QuickAdapter的基类
+ *  Base QuickAdapter
  * Created by chang on 2016/2/26.
  */
 public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper>
         extends RecyclerView.Adapter<BaseAdapterHelper> implements OnClickListener {
 
-    protected Context context;
+    protected static final int HEADER_VIEW = 0x00000001;// 写成这样只是觉得看起来专业
+    protected static final int LOADING_VIEW = 0x00000002;
+    protected static final int FOOTER_VIEW = 0x00000003;
+    protected static final int EMPTY_VIEW = 0x00000004;
 
-    protected int layoutResId;
+    protected Context context;// 上下文对象
 
-    protected List<T> data;
+    protected int layoutResId;// item资源id
+
+    protected List<T> data;// 数据集合
+
+    protected Context mContext;// 全局上下文，由RecyclerView获取
+
+    protected View mContentView;// item布局View
+
+    protected LayoutInflater mLayoutInflater;
+
 
     private OnItemClickListener mOnItemClickListener = null;
 
-    private boolean isFooterRefresh;
 
-
-
+    /**
+     * RecyclerView的item点击事件
+     */
     public interface OnItemClickListener {
+        /**
+         * item点击事件回调
+         * @param view 点击的item View
+         * @param position item View集合中的位置
+         */
         void OnItemClick(View view, int position);
     }
 
@@ -45,6 +62,22 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper>
         this.data = data == null ? new ArrayList<T>() : data;
     }
 
+    public BaseQuickAdapter(List<T> data){
+        this(0,data);
+    }
+
+    public BaseQuickAdapter(int layoutResId, List<T> data){
+        if (layoutResId != 0) {
+            this.layoutResId = layoutResId;
+        }
+        this.data = data == null ? new ArrayList<T>() : data;
+    }
+
+    public BaseQuickAdapter(View contentView, List<T> data){
+        this(0,data);
+        this.mContentView = contentView;
+    }
+
     public BaseQuickAdapter(Context context, MultiItemTypeSupport<T> multiItemTypeSupport) {
         this(context, multiItemTypeSupport, null);
     }
@@ -52,12 +85,6 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper>
     public BaseQuickAdapter(Context context, MultiItemTypeSupport<T> multiItemTypeSupport, List<T> data) {
         this.context = context;
         this.multiItemTypeSupport = multiItemTypeSupport;
-        this.data = data == null ? new ArrayList<T>() : data;
-    }
-
-    public BaseQuickAdapter(Context context, int layoutResId, List<T> data,int minHeight,int heightOffset) {
-        this.context = context;
-        this.layoutResId = layoutResId;
         this.data = data == null ? new ArrayList<T>() : data;
     }
 
@@ -87,12 +114,25 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper>
     @Override
     public BaseAdapterHelper onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
+
+        mContext = parent.getContext();// 赋值Context
+        mLayoutInflater = LayoutInflater.from(mContext);
         if (multiItemTypeSupport != null) {
             int layoutId = multiItemTypeSupport.getLayoutId(viewType);
             view = LayoutInflater.from(context).inflate(layoutId, parent, false);
         } else {
             view = LayoutInflater.from(context).inflate(layoutResId, parent, false);
         }
+
+        // 在这里创建不同布局的item
+        switch (viewType){
+            case HEADER_VIEW:
+
+                break;
+            default:
+
+        }
+
         view.setOnClickListener(this);
         BaseAdapterHelper bah = new BaseAdapterHelper(view);
         return bah;
@@ -105,12 +145,6 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper>
         convert((H) holder, item);
     }
 
-    /**
-     * 适配逻辑实现函数
-     *
-     * @param helper 适配器帮助类
-     * @param item   适配对象
-     */
     protected abstract void convert(H helper, T item);
 
     @Override
@@ -167,5 +201,38 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper>
         data.clear();
         notifyDataSetChanged();
     }
+
+    private View mHeadView;// header view
+
+    // 2016/6/23 添加函数
+
+    /**
+     * 获取Header的数量，没Header返回0，有Header返回1
+     * 计算item position需要
+     * @return Header的数量
+     */
+    public int getHeadViewCount(){
+        return mHeadView == null ? 0 : 1;
+    }
+
+    public void addHeaderView(View headerView){
+        mHeadView = headerView;
+        notifyDataSetChanged();
+    }
+
+    // 创建默认的一般item视图
+    protected BaseAdapterHelper createDefHelper(ViewGroup parent,int layoutResId){
+        if (mContentView == null){
+            return new BaseAdapterHelper(getItemView(parent,layoutResId));
+        }
+        return new BaseAdapterHelper(mContentView);
+    }
+
+    // 获取item的视图
+    protected View getItemView(ViewGroup parent,int layoutResId){
+        return mLayoutInflater.inflate(layoutResId,parent,false);
+    }
+
+
 
 }
