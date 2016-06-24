@@ -15,14 +15,14 @@ import java.util.List;
  * Created by chang on 2016/2/26.
  */
 public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper>
-        extends RecyclerView.Adapter<BaseAdapterHelper> implements OnClickListener {
+        extends RecyclerView.Adapter<BaseAdapterHelper> {
 
     protected static final int HEADER_VIEW = 0x00000001;// 写成这样只是觉得看起来专业
     protected static final int LOADING_VIEW = 0x00000002;
     protected static final int FOOTER_VIEW = 0x00000003;
     protected static final int EMPTY_VIEW = 0x00000004;
 
-    protected Context context;// 上下文对象
+//    protected Context context;// 上下文对象
 
     protected int layoutResId;// item资源id
 
@@ -35,8 +35,9 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper>
     protected LayoutInflater mLayoutInflater;
 
 
-    private OnItemClickListener mOnItemClickListener = null;
+    private OnItemClickListener mOnItemClickListener;
 
+    private OnItemLongClickListener mOnItemLongClickListener;
 
     /**
      * RecyclerView的item点击事件
@@ -50,6 +51,19 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper>
         void OnItemClick(View view, int position);
     }
 
+    /**
+     * RecyclerView的item长按事件
+     */
+    public interface OnItemLongClickListener{
+        /**
+         * item长按事件回调
+         * @param view 长按的item View
+         * @param position item View集合中的位置
+         */
+        boolean OnItemLongClick(View view, int position);
+    }
+
+
     protected MultiItemTypeSupport<T> multiItemTypeSupport;
 
     public BaseQuickAdapter(Context context, int layoutResId) {
@@ -57,7 +71,7 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper>
     }
 
     public BaseQuickAdapter(Context context, int layoutResId, List<T> data) {
-        this.context = context;
+        this.mContext = context;
         this.layoutResId = layoutResId;
         this.data = data == null ? new ArrayList<T>() : data;
     }
@@ -83,7 +97,7 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper>
     }
 
     public BaseQuickAdapter(Context context, MultiItemTypeSupport<T> multiItemTypeSupport, List<T> data) {
-        this.context = context;
+        this.mContext = context;
         this.multiItemTypeSupport = multiItemTypeSupport;
         this.data = data == null ? new ArrayList<T>() : data;
     }
@@ -119,9 +133,9 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper>
         mLayoutInflater = LayoutInflater.from(mContext);
         if (multiItemTypeSupport != null) {
             int layoutId = multiItemTypeSupport.getLayoutId(viewType);
-            view = LayoutInflater.from(context).inflate(layoutId, parent, false);
+            view = LayoutInflater.from(mContext).inflate(layoutId, parent, false);
         } else {
-            view = LayoutInflater.from(context).inflate(layoutResId, parent, false);
+            view = LayoutInflater.from(mContext).inflate(layoutResId, parent, false);
         }
 
         // 在这里创建不同布局的item
@@ -133,8 +147,8 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper>
 
         }
 
-        view.setOnClickListener(this);
         BaseAdapterHelper bah = new BaseAdapterHelper(view);
+        initItemClickListener(bah);
         return bah;
     }
 
@@ -147,15 +161,12 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper>
 
     protected abstract void convert(H helper, T item);
 
-    @Override
-    public void onClick(View v) {
-        if (mOnItemClickListener != null) {
-            mOnItemClickListener.OnItemClick(v, (int) v.getTag());
-        }
-    }
-
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.mOnItemClickListener = listener;
+    }
+
+    public void setOnItemLongClickListener(OnItemLongClickListener listener){
+        this.mOnItemLongClickListener = listener;
     }
 
     public void add(T item) {
@@ -232,6 +243,29 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper>
     protected View getItemView(ViewGroup parent,int layoutResId){
         return mLayoutInflater.inflate(layoutResId,parent,false);
     }
+
+    private void initItemClickListener(final BaseAdapterHelper helper){
+        if (mOnItemClickListener != null) {
+            helper.itemView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnItemClickListener.OnItemClick(v, helper.getLayoutPosition()-getHeadViewCount());
+                }
+            });
+        }
+
+        if (mOnItemLongClickListener != null){
+            helper.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    return mOnItemLongClickListener.OnItemLongClick(v,helper.getLayoutPosition()-getHeadViewCount());
+                }
+            });
+        }
+
+    }
+
+
 
 
 

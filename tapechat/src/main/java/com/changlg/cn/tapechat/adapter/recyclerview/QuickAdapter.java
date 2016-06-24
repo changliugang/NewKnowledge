@@ -1,6 +1,7 @@
 package com.changlg.cn.tapechat.adapter.recyclerview;
 
 import android.content.Context;
+import android.view.View;
 
 import java.util.List;
 
@@ -10,6 +11,18 @@ import java.util.List;
  */
 public abstract class QuickAdapter<T> extends BaseQuickAdapter<T,BaseAdapterHelper>{
 
+
+    public QuickAdapter(List<T> data) {
+        super(data);
+    }
+
+    public QuickAdapter(int layoutResId, List<T> data) {
+        super(layoutResId, data);
+    }
+
+    public QuickAdapter(View contentView, List<T> data) {
+        super(contentView, data);
+    }
 
     public QuickAdapter(Context context, int layoutResId) {
         super(context, layoutResId);
@@ -27,7 +40,5 @@ public abstract class QuickAdapter<T> extends BaseQuickAdapter<T,BaseAdapterHelp
         super(context, multiItemTypeSupport, data);
     }
 
-    public QuickAdapter(Context context, int layoutResId, List<T> data, int minHeight, int heightOffset) {
-        super(context, layoutResId, data, minHeight, heightOffset);
-    }
+
 }

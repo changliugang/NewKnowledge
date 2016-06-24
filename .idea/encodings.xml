@@ -7,8 +7,6 @@
     <file url="file://$PROJECT_DIR$/tapechat/src/main/java/com/changlg/cn/tapechat/adapter/recyclerview/BaseQuickAdapter.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tapechat/src/main/java/com/changlg/cn/tapechat/adapter/recyclerview/MultiItemTypeSupport.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tapechat/src/main/java/com/changlg/cn/tapechat/adapter/recyclerview/QuickAdapter.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/tapechat/src/main/java/com/changlg/cn/tapechat/adapter/recyclerview/listener/OnRecyclerItemClickListener.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/tapechat/src/main/java/com/changlg/cn/tapechat/adapter/recyclerview/listener/OnRecyclerItemLongClickListener.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tapechat/src/main/java/com/changlg/cn/tapechat/gson/GsonUtil.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tapechat/src/main/java/com/changlg/cn/tapechat/log/BaseLog.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/tapechat/src/main/java/com/changlg/cn/tapechat/log/FileLog.java" charset="UTF-8" />

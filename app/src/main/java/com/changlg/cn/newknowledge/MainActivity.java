@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.changlg.cn.newknowledge.crashloghandler.CrashHandler;
 import com.changlg.cn.newknowledge.toolbar.BaseToolbarActivity;
 import com.changlg.cn.tapechat.adapter.recyclerview.BaseAdapterHelper;
+import com.changlg.cn.tapechat.adapter.recyclerview.BaseQuickAdapter;
 import com.changlg.cn.tapechat.adapter.recyclerview.QuickAdapter;
 import com.changlg.cn.tapechat.adapter.recyclerview.divider.HorizontalDividerItemDecoration;
 
@@ -38,8 +39,8 @@ public class MainActivity extends BaseToolbarActivity {
     @Override
     protected void onCreateCustomToolBar(Toolbar toolbar) {
         super.onCreateCustomToolBar(toolbar);
-        toolbar.setNavigationIcon(null);
-        toolbar.setLogo(R.mipmap.ic_launcher);
+//        toolbar.setNavigationIcon(null);
+//        toolbar.setLogo(R.mipmap.ic_launcher);
     }
 
     private void setUpRecyclerView(){
@@ -49,7 +50,21 @@ public class MainActivity extends BaseToolbarActivity {
                 .colorResId(android.R.color.transparent)
                 .sizeResId(R.dimen.activity_horizontal_margin)
                 .showLastDivider().build());
-        QuickAdapter<String> adapter = new QuickAdapter<String>(this,R.layout.item_main_list,list) {
+//        QuickAdapter<String> adapter = new QuickAdapter<String>(this,R.layout.item_main_list,list) {
+//            @Override
+//            protected void convert(BaseAdapterHelper helper, String item) {
+//                helper.setText(R.id.demo_item_name,item);
+//                helper.getTextView(R.id.demo_item_name).setClickable(true);
+//                helper.setOnClickListener(R.id.demo_item_name, new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Toast.makeText(MainActivity.this, "demo_item_name", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//            }
+//        };
+
+        QuickAdapter<String> adapter = new QuickAdapter<String>(R.layout.item_main_list,list) {
             @Override
             protected void convert(BaseAdapterHelper helper, String item) {
                 helper.setText(R.id.demo_item_name,item);
@@ -64,6 +79,12 @@ public class MainActivity extends BaseToolbarActivity {
         };
 
 
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void OnItemClick(View view, int position) {
+                Toast.makeText(MainActivity.this, "position:"+position, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         mainList.setAdapter(adapter);
 
