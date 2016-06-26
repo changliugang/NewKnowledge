@@ -2,10 +2,13 @@ package com.changlg.cn.tapechat.adapter.recyclerview;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+
+import com.changlg.cn.tapechat.log.Loglg;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +25,6 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper>
     protected static final int FOOTER_VIEW = 0x00000003;
     protected static final int EMPTY_VIEW = 0x00000004;
 
-//    protected Context context;// 上下文对象
-
     protected int layoutResId;// item资源id
 
     protected List<T> data;// 数据集合
@@ -34,7 +35,9 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper>
 
     protected LayoutInflater mLayoutInflater;
 
-
+    private View mHeaderView;
+    private View mFooterView;
+    private View mEmptyView;
     private OnItemClickListener mOnItemClickListener;
 
     private OnItemLongClickListener mOnItemLongClickListener;
@@ -107,7 +110,8 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper>
         if (multiItemTypeSupport != null) {
             return multiItemTypeSupport.getCount();
         }
-        return data.size();
+        Loglg.d("chang","ItemCount:"+(data.size()+getHeadViewCount()+getFooterViewCount()));
+        return data.size()+getHeadViewCount()+getFooterViewCount();
     }
 
     public T getItem(int position) {
@@ -122,13 +126,26 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper>
         if (multiItemTypeSupport != null) {
             return multiItemTypeSupport.getItemViewType(position, getItem(position));
         }
-        return super.getItemViewType(position);
+        Loglg.d("chang","position:"+position);
+        return handleItemViewType(position);
     }
+
+    private int handleItemViewType(int position){
+        if (mHeaderView!=null&&position==0){
+            Loglg.d("chang","HEADER_VIEW:"+position);
+            return HEADER_VIEW;}
+        if (position==(getItemCount()-1)){
+            Loglg.d("chang","FOOTER_VIEW:"+position);
+            return FOOTER_VIEW;}
+        Loglg.d("chang","def:"+position);
+       return super.getItemViewType(position-getHeadViewCount());
+    }
+
 
     @Override
     public BaseAdapterHelper onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
-
+        BaseAdapterHelper bah;
         mContext = parent.getContext();// 赋值Context
         mLayoutInflater = LayoutInflater.from(mContext);
         if (multiItemTypeSupport != null) {
@@ -141,13 +158,16 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper>
         // 在这里创建不同布局的item
         switch (viewType){
             case HEADER_VIEW:
-
+                bah = new BaseAdapterHelper(mHeaderView);
+                break;
+            case FOOTER_VIEW:
+                bah = new BaseAdapterHelper(mFooterView);
                 break;
             default:
-
+                bah = createDefHelper(parent,layoutResId);
         }
 
-        BaseAdapterHelper bah = new BaseAdapterHelper(view);
+
         initItemClickListener(bah);
         return bah;
     }
@@ -155,8 +175,15 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper>
     @Override
     public void onBindViewHolder(BaseAdapterHelper holder, int position) {
         holder.itemView.setTag(position);
-        T item = getItem(position);
-        convert((H) holder, item);
+        switch (holder.getItemViewType()){
+            case FOOTER_VIEW:
+            case HEADER_VIEW:
+                break;
+            default:
+                convert((H)holder,data.get(holder.getLayoutPosition()-getHeadViewCount()));
+
+
+        }
     }
 
     protected abstract void convert(H helper, T item);
@@ -213,7 +240,7 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper>
         notifyDataSetChanged();
     }
 
-    private View mHeadView;// header view
+
 
     // 2016/6/23 添加函数
 
@@ -223,11 +250,18 @@ public abstract class BaseQuickAdapter<T, H extends BaseAdapterHelper>
      * @return Header的数量
      */
     public int getHeadViewCount(){
-        return mHeadView == null ? 0 : 1;
+        return mHeaderView == null ? 0 : 1;
     }
 
+    public int getFooterViewCount(){ return mFooterView == null ? 0 : 1; }
+
     public void addHeaderView(View headerView){
-        mHeadView = headerView;
+        mHeaderView = headerView;
+        notifyDataSetChanged();
+    }
+
+    public void addFooterView(View footerView){
+        mFooterView = footerView;
         notifyDataSetChanged();
     }
 
